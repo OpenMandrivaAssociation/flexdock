@@ -18,7 +18,7 @@ BuildRequires:	skinlf
 BuildRequires:	unzip
 BuildRequires:	update-alternatives
 BuildRequires:	xml-commons-apis
-BuildRequires:	libxorg-x11-devel
+BuildRequires:	X11-devel
 Requires:	java >= 1.5
 Requires:	jakarta-commons-logging
 Requires:	jgoodies-looks
