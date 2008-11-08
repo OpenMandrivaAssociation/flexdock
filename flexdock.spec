@@ -1,18 +1,12 @@
-# Copyright (c) 2005-2008 oc2pus
-# This file and all modifications and additions to the pristine
-# package are under the same license as the package itself.
-#
-# Please submit bugfixes or comments to toni@links2linux.de
-
-# norootforbuild
-
-Name:			flexdock
-Summary:		Swing windowing and docking framework
-URL:			https://flexdock.dev.java.net/
-Group:			Development/Java
-Version:		0.5.1
-Release:		%mkrel 0.0.2
-License:		MIT
+Summary:	Swing windowing and docking framework
+Name:		flexdock
+Release:	%mkrel 0.0.2
+License:	MIT
+Group:		Development/Java
+Version:	0.5.1
+URL:		https://flexdock.dev.java.net/
+Source0:	%{name}-%{version}-src.zip
+Patch0:		%{name}-build.xml.diff
 BuildRequires:	ant
 BuildRequires:	dos2unix
 BuildRequires:	fmj
@@ -25,14 +19,12 @@ BuildRequires:	unzip
 BuildRequires:	update-alternatives
 BuildRequires:	xml-commons-apis
 BuildRequires:	libxorg-x11-devel
-Requires:		java >= 1.5
-Requires:		jakarta-commons-logging
-Requires:		jgoodies-looks
-Requires:		jpackage-utils
-Requires:		skinlf
-BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Source0:		%{name}-%{version}-src.zip
-Patch0:			%{name}-build.xml.diff
+Requires:	java >= 1.5
+Requires:	jakarta-commons-logging
+Requires:	jgoodies-looks
+Requires:	jpackage-utils
+Requires:	skinlf
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 FlexDock is a Java docking framework for use in cross-platform Swing
@@ -50,7 +42,6 @@ It is released using the MIT license.
 %package javadoc
 Summary:	Javadoc for flexdock
 Group:		Development/Java
-PreReq:		coreutils
 
 %description javadoc
 Javadoc for flexdock.
@@ -58,7 +49,7 @@ Javadoc for flexdock.
 %package demo
 Summary:	Some examples for flexdock
 Group:		Development/Java
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	fmj
 Requires:	java >= 1.5
 Requires:	jakarta-commons-logging
@@ -88,7 +79,7 @@ find . -name *.o   | xargs %__rm -f
 dos2unix     README* LICENSE.txt
 %__chmod 644 README* LICENSE.txt
 
-%__sed -i -e 's|-L/usr/X11R6/lib|-L/usr/X11R6/%{_lib}|g' \
+%__sed -i -e 's|-L/usr/X11R6/lib|-L%{_libdir}|g' \
 	build.xml
 
 %build
@@ -146,12 +137,11 @@ EOF
 %doc %{_javadocdir}/%{name}
 
 %files demo
-%defattr(-,root,root,-)
+%defattr(-,root,root)
 %{_bindir}/%{name}-demo.sh
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/*
 
 %files manual
-%defattr(-,root,root,-)
+%defattr(-,root,root)
 %doc docs/
-
