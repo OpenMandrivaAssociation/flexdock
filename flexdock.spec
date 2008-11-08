@@ -61,7 +61,7 @@ Some examples for flexdock.
 
 %package manual
 Summary:	User documetation for flexdock
-Group:		Documentation/Other
+Group:		Development/Java
 
 %description manual
 Usermanual for flexdock.
