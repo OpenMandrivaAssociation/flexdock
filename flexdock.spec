@@ -85,7 +85,7 @@ dos2unix     README* LICENSE.txt
 %build
 export CLASSPATH=$(build-classpath jgoodies-looks)
 %ant -Dbuild.sysclasspath=first \
-	-Dsdk.home="%{_libdir}/jvm/java" \
+	-Dsdk.home="%{java_home}" \
 	build.with.native jar javadoc
 
 %install
