@@ -1,9 +1,9 @@
 Summary:	Swing windowing and docking framework
 Name:		flexdock
-Release:	%mkrel 0.0.4
+Release:	%mkrel 1
 License:	MIT
 Group:		Development/Java
-Version:	0.5.1
+Version:	0.5.2
 URL:		https://flexdock.dev.java.net/
 Source0:	%{name}-%{version}-src.zip
 Patch0:		%{name}-build.xml.diff
@@ -68,7 +68,7 @@ Usermanual for flexdock.
 
 %prep
 %setup -q -c -n %{name}
-%patch0
+%patch0 -p1
 
 # cleanup
 %__rm -rf lib
