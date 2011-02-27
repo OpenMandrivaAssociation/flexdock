@@ -1,6 +1,6 @@
 Summary:	Swing windowing and docking framework
 Name:		flexdock
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	MIT
 Group:		Development/Java
 Version:	0.5.2
