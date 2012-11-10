@@ -1,0 +1,96 @@
+--- flexdock/build.xml.orig	2011-01-21 15:20:28.749973828 -0200
++++ flexdock/build.xml	2011-01-21 15:24:53.172973569 -0200
+@@ -10,13 +10,13 @@
+    <!-- This is the default location of the JDK to compile native DLL/so against.
+         If your JDK is in a different location then create a
+         workingcopy.properties and set sdk.home to your preferred value there -->
+-   <property name="sdk.home" value="c:/jdk1.5.0._03"/>
++   <property name="sdk.home" value="/usr/lib/jvm/java"/>
+    <property name="sdk.include" value="${sdk.home}/include"/>
+ 
+    <!-- build-source properties -->
+    <property name="java.src" value="${basedir}/src/java" />
+    <property name="webstart.src" value="${basedir}/src/webstart" />
+-   <property name="lib.dir" value="${basedir}/lib" />
++   <property name="lib.dir" value="/usr/share/java" />
+    <property name="java.src.core" value="${java.src}/core" />
+    <property name="java.src.demo" value="${java.src}/demo" />
+    <property name="java.src.dockbar" value="${java.src}/dockbar" />
+@@ -59,8 +59,8 @@
+    </path>
+    <path id="javac.classpath.demo">
+       <path refid="javac.classpath" />
+-      <pathelement location="${lib.dir}/jmf/lib/jmf.jar" />
+-      <pathelement location="${lib.dir}/looks-2.1.1.jar" />
++      <pathelement location="${lib.dir}/fmj/fmj.jar" />
++      <pathelement location="${lib.dir}/looks2.jar" />
+    </path>
+    <path id="javac.classpath.test">
+       <path refid="javac.classpath" />
+@@ -69,18 +69,19 @@
+ 
+    <path id="rt.classpath">
+       <pathelement location="${bin.dir}"/>
++      <pathelement location="${lib.dir}/commons-logging.jar"/>
+    </path>
+    <path id="rt.classpath.demo">
+       <pathelement location="${bin.dir.demo}"/>
+-      <pathelement location="${lib.dir}/jmf.jar"/><!-- needed only for JMF demo -->
++      <pathelement location="${lib.dir}/fmj/fmj.jar"/><!-- needed only for JMF demo -->
+       <pathelement location="${bin.dir}"/>
+-	  <pathelement location="${lib.dir}/commons-logging-1.1.jar"/>
++	  <pathelement location="${lib.dir}/commons-logging.jar"/>
+    </path>
+    <path id="rt.classpath.test">
+       <pathelement location="${bin.dir.test}"/>
+       <pathelement location="${bin.dir}"/>
+       <pathelement location="${bin.dir.demo}"/> <!-- needed for a couple of the tests -->
+-	  <pathelement location="${lib.dir}/commons-logging-1.1.jar"/>
++	  <pathelement location="${lib.dir}/commons-logging.jar"/>
+ 	  <pathelement location="${lib.dir}/skinlf.jar"/>
+    </path>
+ 
+@@ -118,7 +119,7 @@
+       <condition property="os.unixWithXlib">
+          <and>
+             <os family="unix"/>
+-            <available file="/usr/X11R6/include/X11/Xlib.h"/>
++            <available file="/usr/include/X11/Xlib.h"/>
+          </and>
+       </condition>
+    </target>
+@@ -279,8 +280,9 @@
+    <target name="compile.unix.lib" depends="native.init,compile,resources" if="os.unixWithXlib" 
+            description="Compile the shared library if you're on a UNIX of some sort">
+ 
+-      <getprefixlibrarykey property="library.key"/>
++<!--      <getprefixlibrarykey property="library.key"/> -->
+ 
++      <property name="library.key" value="-linux-x86"/>
+       <property name="c.dir" value="${basedir}/src/c/core/org/flexdock/docking/drag/outline/xlib"/>
+       <property name="so.dir" value="${build.dir}/bin/org/flexdock/docking/drag/outline/xlib"/>
+ 
+@@ -293,6 +295,7 @@
+          <arg value="-lX11"/>
+          <arg value="-L/usr/X11R6/lib"/>
+          <arg value="-I/usr/X11R6/include"/>
++         <arg value="-fPIC"/>
+          <arg value="-o"/>
+          <arg value="${so.dir}/libRubberBand${library.key}.so"/>
+          <arg value="-shared"/>
+@@ -334,15 +337,10 @@
+               I believe this BUG is the cause: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4490798 -->
+          <manifest>
+             <!-- matches core jar name -->
+-            <attribute name="Class-Path" value="${dist.jar.name} lib/commons-logging-1.1.jar lib/jmf/lib/jmf.jar lib/looks-2.1.1.jar"/> 
+             <attribute name="Main-Class" value="org.flexdock.demos.AllDemos"/>
+          </manifest>
+       </jar>
+ 
+-      <mkdir dir="${build.dir}/lib"/>
+-      <copy todir="${build.dir}/lib">
+-         <fileset dir="${lib.dir}"/>
+-      </copy>
+    </target>
+ 
+    <target name="doc" depends="init, javadoc"
