@@ -1,29 +1,29 @@
-Summary:	Swing windowing and docking framework
-Name:		flexdock
-Release:	%mkrel 3
-License:	MIT
-Group:		Development/Java
-Version:	0.5.2
-URL:		https://flexdock.dev.java.net/
-Source0:	%{name}-%{version}-src.zip
-Patch0:		%{name}-build.xml.diff
+Name:		    flexdock
+Version:	    1.2.3
+Release:	    1
+Summary:	    Docking framework for Java Swing GUI apps
+Group:		    Development/Java
+License:	    MIT 
+URL:		    http://forge.scilab.org/index.php/p/flexdock/
+Source0:	    http://forge.scilab.org/index.php/p/flexdock/downloads/get/%{name}-%{version}.tar.gz
+Patch1:		    flexdock-1.2.3-demos.patch
+Patch2:		    flexdock-1.2.3-build.patch
+BuildRequires:	pkgconfig(x11)
+BuildRequires:	java-devel
 BuildRequires:	ant
-BuildRequires:	dos2unix
-BuildRequires:	fmj
-BuildRequires:	apache-commons-logging
-BuildRequires:	java-rpmbuild >= 1.5
 BuildRequires:	jpackage-utils
+BuildRequires:	jgoodies-common
 BuildRequires:	jgoodies-looks
 BuildRequires:	skinlf
-BuildRequires:	unzip
-BuildRequires:	update-alternatives
-BuildRequires:	xml-commons-apis
-Requires:	java >= 1.5
-Requires:	apache-commons-logging
-Requires:	jgoodies-looks
-Requires:	jpackage-utils
-Requires:	skinlf
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+
+Requires:       java
+Requires:       jpackage-utils
+Requires:       jgoodies-common
+Requires:       jgoodies-looks
+Requires:       skinlf
+
+BuildArch:      noarch
+
 
 %description
 FlexDock is a Java docking framework for use in cross-platform Swing
@@ -38,6 +38,7 @@ framework such as:
 
 It is released using the MIT license.
 
+#-------------------
 %package javadoc
 Summary:	Javadoc for flexdock
 Group:		Development/Java
@@ -45,102 +46,54 @@ Group:		Development/Java
 %description javadoc
 Javadoc for flexdock.
 
-%package demo
-Summary:	Some examples for flexdock
-Group:		Development/Java
-Requires:	%{name} = %{version}-%{release}
-Requires:	fmj
-Requires:	java >= 1.5
-Requires:	apache-commons-logging
-Requires:	jgoodies-looks
-Requires:	skinlf
-
-%description demo
-Some examples for flexdock.
-
+#-------------------
 %package manual
-Summary:	User documetation for flexdock
+Summary:	User documentation for flexdock
 Group:		Development/Java
 
 %description manual
-Usermanual for flexdock.
+User manual for flexdock.
 
+#-------------------
 %prep
-%setup -q -c -n %{name}
-%patch0 -p1
+%setup -q
+%patch1 -p1
+%patch2 -p1
 
-# cleanup
-%__rm -rf lib
-find . -name *.so  | xargs %__rm -f
-find . -name *.dll | xargs %__rm -f
-find . -name *.o   | xargs %__rm -f
+echo "sdk.home=%{java_home}" > workingcopy.properties
+find ./ -name \*.jar -exec rm {} \;
+build-jar-repository -s -p lib skinlf jgoodies-looks jgoodies-common
+rm src/java/demo/org/flexdock/demos/raw/jmf/MediaPanel.java
+rm src/java/demo/org/flexdock/demos/raw/jmf/JMFDemo.java
 
-dos2unix     README* LICENSE.txt
-%__chmod 644 README* LICENSE.txt
-
-%__sed -i -e 's|-L/usr/X11R6/lib|-L%{_libdir}|g' \
-	build.xml
+for i in "LICENSE.txt README release-notes.txt" ;
+do
+    %{__sed} -i 's/\r//' $i
+done
 
 %build
-export CLASSPATH=$(build-classpath jgoodies-looks)
-%ant -Dbuild.sysclasspath=first \
-	-Dsdk.home="%{java_home}" \
-	build.with.native jar javadoc
+ant jar
 
 %install
 # jars
-%__install -dm 755 %{buildroot}%{_javadir}
-%__install -pm 644 build/%{name}-%{version}.jar \
-	%{buildroot}%{_javadir}
-pushd %{buildroot}%{_javadir}
-	for jar in *-%{version}*; do
-		ln -sf ${jar} `echo $jar| sed "s|-%{version}||g"`
-	done
-popd
+mkdir -p %{buildroot}%{_javadir}
+install -pm644 build/%{name}-%{version}.jar %{buildroot}%{_javadir}/%{name}.jar
 
 # javadoc
-%__install -dm 755 %{buildroot}%{_javadocdir}/%{name}-%{version}
-%__cp -pr build/docs/api/* \
+install -dm 755 %{buildroot}%{_javadocdir}/%{name}-%{version}
+cp -pr docs/* \
 	%{buildroot}%{_javadocdir}/%{name}-%{version}
 ln -s %{name}-%{version} %{buildroot}%{_javadocdir}/%{name}
 
-# demo
-%__install -dm 755 %{buildroot}%{_datadir}/%{name}
-%__install -pm 644 build/%{name}-demo-%{version}.jar \
-	%{buildroot}%{_datadir}/%{name}
-%__install -pm 644 build.xml \
-	%{buildroot}%{_datadir}/%{name}
-
-# startscripts for demo-apps
-%__cat > %{name}-demo.sh << EOF
-#!/bin/bash
-%java \
-	-cp \`build-classpath commons-logging skinlf fmj jgoodies-looks %{name}\`:%{_datadir}/%{name}/%{name}-demo-%{version}.jar \
-	org.flexdock.demos.AllDemos
-EOF
-%__install -dm 755 %{buildroot}%{_bindir}
-%__install -pm 755 %{name}-demo.sh \
-	%{buildroot}%{_bindir}
-
-%clean
-[ -d %{buildroot} -a "%{buildroot}" != "" ] && %__rm -rf %{buildroot}
 
 %files
-%defattr(-,root,root)
-%doc LICENSE.txt README*
-%{_javadir}/*.jar
+%doc LICENSE.txt README release-notes.txt
+%{_javadir}/*
 
 %files javadoc
 %defattr(0644,root,root,0755)
 %doc %{_javadocdir}/%{name}-%{version}
 %doc %{_javadocdir}/%{name}
 
-%files demo
-%defattr(-,root,root)
-%{_bindir}/%{name}-demo.sh
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/*
-
 %files manual
-%defattr(-,root,root)
 %doc docs/
