@@ -10,7 +10,7 @@ Patch0:		%{name}-build.xml.diff
 BuildRequires:	ant
 BuildRequires:	dos2unix
 BuildRequires:	fmj
-BuildRequires:	jakarta-commons-logging
+BuildRequires:	apache-commons-logging
 BuildRequires:	java-rpmbuild >= 1.5
 BuildRequires:	jpackage-utils
 BuildRequires:	jgoodies-looks
@@ -19,7 +19,7 @@ BuildRequires:	unzip
 BuildRequires:	update-alternatives
 BuildRequires:	xml-commons-apis
 Requires:	java >= 1.5
-Requires:	jakarta-commons-logging
+Requires:	apache-commons-logging
 Requires:	jgoodies-looks
 Requires:	jpackage-utils
 Requires:	skinlf
@@ -51,7 +51,7 @@ Group:		Development/Java
 Requires:	%{name} = %{version}-%{release}
 Requires:	fmj
 Requires:	java >= 1.5
-Requires:	jakarta-commons-logging
+Requires:	apache-commons-logging
 Requires:	jgoodies-looks
 Requires:	skinlf
 
