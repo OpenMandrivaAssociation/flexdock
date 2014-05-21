@@ -1,3 +1,4 @@
-sources:
-  "flexdock-0.5.2-src.zip": 75a3cffc4f6fb9051501e54fdeab8034ec3ffa2e
+removed_sources:
   flexdock-1.2.3.tar.gz: 85c834c19846da65c153191fe0b81eeddf481688
+sources:
+  flexdock-1.2.4.tar.gz: 561c881ee30a530a07c8e74387c5db342297ed67

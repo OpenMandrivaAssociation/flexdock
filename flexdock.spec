@@ -1,5 +1,5 @@
 Name:		    flexdock
-Version:	    1.2.3
+Version:	    1.2.4
 Release:	    1
 Summary:	    Docking framework for Java Swing GUI apps
 Group:		    Development/Java
