@@ -4,7 +4,7 @@ Release:	    2
 Summary:	    Docking framework for Java Swing GUI apps
 Group:		    Development/Java
 License:	    MIT 
-URL:		    http://forge.scilab.org/index.php/p/flexdock/
+URL:		    https://forge.scilab.org/index.php/p/flexdock/
 Source0:	    http://forge.scilab.org/index.php/p/flexdock/downloads/get/%{name}-%{version}.tar.gz
 Patch1:		    flexdock-1.2.3-demos.patch
 Patch2:		    flexdock-1.2.3-build.patch
